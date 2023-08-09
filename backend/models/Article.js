@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Category = require('./Category'); 
 
 const articleSchema = new mongoose.Schema({
   title: String,

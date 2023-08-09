@@ -15,6 +15,7 @@ const CreateArticle = () => {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   const [editorContent, setEditorContent] = useState("");
+  const [banner, setBanner] = useState(null);
   const apiKey = import.meta.env.VITE_API_TINY_KEY;
   const cloudName = import.meta.env.VITE_CLOUD_NAME;
   const uploadPreset = import.meta.env.VITE_UPLOAD_PRESET;
@@ -63,8 +64,11 @@ const CreateArticle = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // handle the banner image file
-    const handleMainImageChange = async (e) => {
-      const file = e.target.files[0];
+    const handleMainImageChange = async () => {
+      console.log(banner);
+      // const file = e.target.files;
+      const file = banner;
+      console.log(file);
       if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
         const formData = new FormData();
         formData.append("file", file);
@@ -222,6 +226,7 @@ const CreateArticle = () => {
                   type="file"
                   name="mainImage"
                   accept="image/jpeg, image/png"
+                  onChange={(e)=>setBanner(e.target.files[0])}
                 />
               </div>
             </div>

@@ -121,7 +121,7 @@ a {
 
 @media screen and (max-width: 991.98px) {
   .sidebar {
-    padding-left: 15px;
+    padding-left: 15px !important;
   }
 }
 

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 
 const SinglePageComment = () => {
   const [name, setName] = useState("");
-  const [website, setWebsite] = useState("");
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -11,29 +11,26 @@ const SinglePageComment = () => {
   const [replyIndex, setReplyIndex] = useState(null);
   const [replyName, setReplyName] = useState("");
 
+  // Load comments from the server on component mount
   useEffect(() => {
-    // Load comments from localStorage
-    const storedComments = JSON.parse(localStorage.getItem("comments"));
-    if (storedComments) {
-      setComments(storedComments);
-    }
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/comments");
+        const fetchedComments = response.data;
+
+        setComments(fetchedComments);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchComments();
   }, []);
 
-  useEffect(() => {
-    // Save comments to localStorage
-    return () => {
-      localStorage.setItem("comments", JSON.stringify(comments));
-    };
-  }, [comments]);
   const handleReplyNameChange = (event) => {
     setReplyName(event.target.value);
   };
   const handleNameChange = (event) => {
     setName(event.target.value);
-  };
-
-  const handleWebsiteChange = (event) => {
-    setWebsite(event.target.value);
   };
 
   const handleEmailChange = (event) => {
@@ -56,56 +53,88 @@ const SinglePageComment = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch avatar");
       }
-      const blob = await response.blob();
-      const avatarUrl = URL.createObjectURL(blob);
+      const data = await response.arrayBuffer();
+      const base64Data = btoa(
+        new Uint8Array(data).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ""
+        )
+      );
+      const avatarUrl = `data:image/png;base64,${base64Data}`;
       return avatarUrl;
     } catch (error) {
       console.error(error);
     }
   };
-  
 
-  // handle comment change and update comment
-  const handleCommentSubmit = async () => {
-    
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
     if (name.trim() !== "" && comment.trim() !== "") {
-      let newComment = {
-        name: name,
-        comment: comment,
-        datetime: new Date().toLocaleString(),
-        replies: [],
-        avatar: "",
-      };
+      try {
+        const avatar = await fetchAvatar(name);
+        const newComment = {
+          name: name,
+          comment: comment,
+          email: email,
+          datetime: new Date().toISOString(),
+          avatar: avatar,
+        };
+        console.log(newComment);
 
-      const avatar = await fetchAvatar(newComment.name);
-      newComment.avatar = avatar;
-      setComments([...comments, newComment]);
-      setName("");
-      setWebsite("");
-      setEmail("");
-      setComment("");
+        const response = await axios.post(
+          "http://localhost:5000/api/comments",
+          newComment
+        );
+        setComments([...comments, response.data]);
+        clearFormFields();
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
-  // handle reply submission
-  const handleReplySubmit = async (e, commentIndex) => {
+  const handleReplySubmit = async (e, commentId) => {
     e.preventDefault();
     if (reply.trim() !== "") {
-      const updatedComments = [...comments];
-      updatedComments[commentIndex].replies.push({
-        name: replyName,
-        reply: reply,
-        datetime: new Date().toLocaleString(),
-        avatar: await fetchAvatar(replyName),
-      });
+      try {
+        const avatar = await fetchAvatar(replyName);
+        const newReply = {
+          name: replyName,
+          reply: reply,
+          datetime: new Date().toISOString(),
+          avatar: avatar,
+        };
 
-      setComments(updatedComments);
-      setReply("");
-      setReplyName("");
-      setReplyIndex(null);
+        const response = await axios.post(
+          `http://localhost:5000/api/comments/${commentId}/replies`,
+          newReply
+        );
+        const savedReply = response.data;
+
+        const updatedComments = comments.map((comment) =>
+          comment._id === commentId
+            ? { ...comment, replies: [...comment.replies, savedReply] }
+            : comment
+        );
+
+        setComments(updatedComments);
+        clearReplyFormFields();
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
+  const clearFormFields = () => {
+    setName("");
+    setEmail("");
+    setComment("");
+  };
 
+  const clearReplyFormFields = () => {
+    setReply("");
+    setReplyName("");
+    setReplyIndex(null);
+  };
   // format the date
   const getFormattedDate = (date) => {
     const options = {
@@ -130,7 +159,7 @@ const SinglePageComment = () => {
         <h3 className="mb-5">{comments.length} Comments</h3>
         <ul className="comment-list">
           {comments.map((comment, commentIndex) => (
-            <li key={commentIndex} className="comment">
+            <li key={comment._id} className="comment">
               <div className="vcard">
                 {comment.avatar ? (
                   <img src={comment.avatar} alt="Random Avatar" />
@@ -177,7 +206,7 @@ const SinglePageComment = () => {
                         />
                       </div>
                       <button
-                        onClick={(e) => handleReplySubmit(e, commentIndex)}
+                        onClick={(e) => handleReplySubmit(e, comment._id)}
                         className="btn btn-info"
                       >
                         Submit Reply
@@ -192,14 +221,16 @@ const SinglePageComment = () => {
                   <li key={replyIndex} className="comment">
                     <div className="vcard">
                       {reply.avatar ? (
-                        <img src={reply.avatar} alt="Reply Avatar" /> 
+                        <img src={reply.avatar} alt="Reply Avatar" />
                       ) : (
                         <p>....</p>
                       )}
                     </div>
                     <div className="comment-body">
                       <h3>{reply.name}</h3>
-                      <div className="meta">{reply.datetime}</div>
+                      <div className="meta">
+                        {getFormattedDate(reply.datetime)}
+                      </div>
                       <p>{reply.reply}</p>
                       <p>
                         <a
@@ -244,16 +275,7 @@ const SinglePageComment = () => {
                 required
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="website">Website</label>
-              <input
-                type="url"
-                className="form-control"
-                id="website"
-                value={website}
-                onChange={handleWebsiteChange}
-              />
-            </div>
+
             <div className="form-group">
               <label htmlFor="message">Message *</label>
               <textarea

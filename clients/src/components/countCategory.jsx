@@ -1,6 +1,6 @@
 // Import the JSON data directly
-import articlesData from "../api/data.json";
 import { Link, Outlet } from "react-router-dom";
+import useFetchArticles from "../context/useFetchArticles";
 
 
 const CountCategory = () => {
@@ -9,12 +9,14 @@ const CountCategory = () => {
   // const pathSegments = location.pathname.split("/");
   // const lastPathSegment = pathSegments[pathSegments.length - 1];
 
-  
+  const { articles } = useFetchArticles(
+    "http://localhost:5000/api/articles"
+  );
   // Process the JSON data to count articles in each category
   const categoryCounts = {};
 
   // Loop through the articles and count them for each category
-  articlesData.articles.forEach((article) => {
+  articles.forEach((article) => {
     article.categories.forEach((category) => {
       const { name } = category;
       categoryCounts[name] = (categoryCounts[name] || 0) + 1;

@@ -1,42 +1,56 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { useIncrementClickCount } from "../context/clickCount";
+import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import useFetchArticles from "../context/useFetchArticles";
+import useFetchAvatars from "../context/useFetchAvatar.js";
+import { useIncrementClickCount } from "../context/clickCount";
 import "../styles/single.css";
-import PropTypes from "prop-types";
-import jsonData from "../api/data.json";
-import SinglePageSection from '../components/singlePageSection';
-
+import SinglePageSection from "../components/singlePageSection";
 
 const SinglePage = () => {
-  // Use the useParams hook to get the URL parameters
   const { id } = useParams();
-  const postId = parseInt(id);
+  const postId = id;
+  const [authorName, setAuthorName] = useState("");
 
-  // Find the selected blog post from jsonData based on the postId
-  const selectedPost = jsonData.articles.find((post) => post.id === postId);
-
-  // Use the custom hook to increment the click count
+  const { articles, loading } = useFetchArticles(
+    "http://localhost:5000/api/articles"
+  );
+  const avatars = useFetchAvatars([authorName]);
   const incrementClickCount = useIncrementClickCount();
 
+  const selectedPost = articles.find((post) => post._id === postId);
+
   useEffect(() => {
-    // Increment post click count on page visit
-    incrementClickCount(postId);
-  }, [postId, incrementClickCount]);
+    if (selectedPost) {
+      setAuthorName(selectedPost.author);
+
+      // Increment post click count on page visit
+      incrementClickCount(postId);
+    }
+  }, [selectedPost, postId, incrementClickCount]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   if (!selectedPost) {
     return <div>Post not found.</div>;
   }
 
   // Absolute path to the image
-  const imageUrl = `${window.location.origin}/${selectedPost.image1}`;
-  const headshot = `${window.location.origin}/${selectedPost.author.headshot}`;
+  const imageUrl = selectedPost.mainImage;
+  const headshot = avatars;
+
+  // get the date when the articles was created
+  const createdAtDate = new Date(selectedPost.createdAt);
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  const formattedDate = createdAtDate.toLocaleDateString(undefined, options);
   return (
     <>
       <div
         className="site-cover site-cover-sm same-height overlay single-page"
         style={{ backgroundImage: `url(${imageUrl})` }}
-        key={selectedPost.id}
+        key={selectedPost._id}
       >
         <div className="container">
           <div className="row same-height justify-content-center">
@@ -46,17 +60,16 @@ const SinglePage = () => {
                   return (
                     <span
                       className={`post-category text-white bg-${item.color} mb-3 me-2`}
-                      key={item.id}
+                      key={item._id}
                     >
                       {item.name}
                     </span>
                   );
                 })}
                 <h1 className="mb-4">
-                  <Link to={`/post/${selectedPost.id}`}>
-                  {selectedPost.title}
+                  <Link to={`/post/${selectedPost._id}`}>
+                    {selectedPost.title}
                   </Link>
-                  
                 </h1>
                 <div className="post-meta align-items-center text-center">
                   <figure className="author-figure mb-0 me-3 d-inline-block">
@@ -67,9 +80,9 @@ const SinglePage = () => {
                     />
                   </figure>
                   <span className="d-inline-block mt-1">
-                    By {`${selectedPost.author.firstname} ${selectedPost.author.lastname}`}
+                    By {selectedPost.author}
                   </span>
-                  <span>&nbsp;-&nbsp; {`${selectedPost.date.month} ${selectedPost.date.day}, ${selectedPost.date.year}` }</span>
+                  <span>&nbsp;-&nbsp; {formattedDate}</span>
                 </div>
               </div>
             </div>
@@ -77,16 +90,11 @@ const SinglePage = () => {
         </div>
       </div>
 
-      <SinglePageSection data={selectedPost}/>
-              
+      <SinglePageSection data={selectedPost} />
 
       <Outlet />
     </>
   );
-};
-
-SinglePage.propTypes = {
-  match: PropTypes.object,
 };
 
 export default SinglePage;

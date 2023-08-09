@@ -8,6 +8,7 @@ const CreateCategory = () => {
   const [selectedColor, setSelectedColor] = useState("");
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [errors, setError] = useState("");
+  const [description, setDescription] = useState("");
 
 
   useEffect(() => {
@@ -27,19 +28,20 @@ const CreateCategory = () => {
         body: JSON.stringify({
           name: capitalizedCategoryName, // Capitalize the first letter
           color: selectedColor,
+          description: description
         }),
       });
 
       if (response.ok) {
         // Category successfully added
         const newCategory = await response.json();
-        alert(newCategory);
 
         // Clear input fields
         setCategories([...categories, newCategory]);
         setNewCategoryName("");
         setSelectedColor("");
-        setShowAddCategory(false); // Hide the inputs after adding
+        setDescription("");
+        setShowAddCategory(false);// Hide the inputs after adding
       } else {
         const errorResponse = await response.json();
         alert(errorResponse);
@@ -77,10 +79,7 @@ const CreateCategory = () => {
     }
   };
 
-  // const editCategory = (category) => {
-  //   setEditingCategory(category);
-  // };
-
+ 
   // editing category function
   const startEditing = (category) => {
     setEditingCategory(category._id);
@@ -155,9 +154,7 @@ const CreateCategory = () => {
                   value={selectedColor}
                   onChange={(e) => setSelectedColor(e.target.value)}
                 >
-                  <option value="success" className="bg-success">
-                    Success
-                  </option>
+                  
                   <option value="primary" className="bg-primary">
                     Primary
                   </option>
@@ -173,10 +170,25 @@ const CreateCategory = () => {
                   <option value="secondary" className="bg-secondary">
                     Secondary
                   </option>
+                  <option value="success" className="bg-success">
+                    Success
+                  </option>
                 </select>
                 <label htmlFor="floatingSelect" className="ms-2">
                   Select a color
                 </label>
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-12">
+                <textarea
+                rows={3}
+                name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="form-control rounded"
+                placeholder="Enter a description for the category"
+                />
               </div>
             </div>
             <div className="row">

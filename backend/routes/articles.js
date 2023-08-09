@@ -1,6 +1,7 @@
 const express = require('express');
 const Article = require('../models/Article');
 
+
 const router = express.Router();
 
 // Create API endpoint to add a new article
@@ -19,18 +20,16 @@ router.post('/', async (req, res) => {
 
 
 
+
 // Create API endpoint to get all articles
-router.get('/', (req, res) => {
-  Article.find()
-    .populate('categories') // Populate the 'categories' field with category data
-    .exec((err, articles) => {
-      if (err) {
-        console.error('Error fetching articles:', err);
-        res.status(500).json({ error: 'Internal server error' });
-      } else {
-        res.status(200).json(articles);
-      }
-    });
+router.get('/', async (req, res) => {
+  try {
+    const articles = await Article.find().populate('categories').exec();
+    res.status(200).json(articles);
+  } catch (error) {
+    console.error('Error fetching articles:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 router.post('/increment-click/:id', async (req, res) => {
@@ -39,7 +38,7 @@ router.post('/increment-click/:id', async (req, res) => {
     if (!article) {
       return res.status(404).json({ message: 'Article not found' });
     }
-    article.clickCount += 1;
+    article.clickCount++;
     await article.save();
     res.json(article);
   } catch (error) {
