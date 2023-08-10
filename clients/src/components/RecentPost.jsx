@@ -3,7 +3,7 @@ import useFetchArticles from "../context/useFetchArticles";
 import useFetchAvatars from "../context/useFetchAvatar.js";
 
 const RecentPost = () => {
-  const { articles, loading } = useFetchArticles("http://localhost:5000/api/articles");
+  const { articles, loading } = useFetchArticles("https://aramid-blog.onrender.com/api/articles");
   const authorNames = articles.map((data) => data.author);
   const avatars = useFetchAvatars(authorNames);
 

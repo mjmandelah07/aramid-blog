@@ -17,11 +17,9 @@ const SinglePageSection = ({ data }) => {
   const parsedContent = parse(paragraphs);
 
   useEffect(() => {
-    console.log(data.description);
     setParagraphs(data.description);
   }, [data.description]);
 
-  console.log();
   return (
     <>
       <section className="site-section py-lg">
@@ -31,26 +29,30 @@ const SinglePageSection = ({ data }) => {
               <div className="post-content-body">
                 <div className="row">
                   {parsedContent.map((element, index) => {
-                   if (element.type === "p" && element.props) {
-                    const pContent = element.props.children;
-            
-                    // Check if the p tag contains img elements in its children
-                    const imgElements = React.Children.toArray(pContent).filter(
-                      (child) => child.type === "img"
-                    );
-                    const imgStyle = {
-                      maxWidth: '100%',
-                      height: '300px',
-                      marginTop: '20px',
-                      marginBottom: '10px'
-                    };
-                    if (imgElements.length > 0) {
-                      // Render the img elements
-                      return (
-                        <div className="col-md-12" key={index}>
-                          {imgElements.map((imgElement, imgIndex) => (
-                            <div key={imgIndex}>{React.cloneElement(imgElement, { style: imgStyle })}</div>
-                          ))}
+                    if (element.type === "p" && element.props) {
+                      const pContent = element.props.children;
+
+                      // Check if the p tag contains img elements in its children
+                      const imgElements = React.Children.toArray(
+                        pContent
+                      ).filter((child) => child.type === "img");
+                      const imgStyle = {
+                        maxWidth: "100%",
+                        height: "300px",
+                        marginTop: "20px",
+                        marginBottom: "10px",
+                      };
+                      if (imgElements.length > 0) {
+                        // Render the img elements
+                        return (
+                          <div className="col-md-12" key={index}>
+                            {imgElements.map((imgElement, imgIndex) => (
+                              <div key={imgIndex}>
+                                {React.cloneElement(imgElement, {
+                                  style: imgStyle,
+                                })}
+                              </div>
+                            ))}
                           </div>
                         );
                       }

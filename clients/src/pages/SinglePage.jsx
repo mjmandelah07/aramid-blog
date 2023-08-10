@@ -13,7 +13,7 @@ const SinglePage = () => {
   const [authorName, setAuthorName] = useState("");
 
   const { articles, loading } = useFetchArticles(
-    "http://localhost:5000/api/articles"
+    "https://aramid-blog.onrender.com/api/articles"
   );
   const avatars = useFetchAvatars([authorName]);
   const incrementClickCount = useIncrementClickCount();

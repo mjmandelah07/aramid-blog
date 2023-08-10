@@ -6,7 +6,7 @@ export function useIncrementClickCount() {
     try {
       const userClicked = true; 
       if (userClicked) {
-        await axios.post(`http://localhost:5000/api/articles/increment-click/${postId}`);
+        await axios.post(`https://aramid-blog.onrender.com/api/articles/increment-click/${postId}`);
       }
     } catch (error) {
       console.error('Error incrementing click count:', error);

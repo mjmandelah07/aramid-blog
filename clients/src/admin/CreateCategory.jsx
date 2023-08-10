@@ -20,7 +20,7 @@ const CreateCategory = () => {
       const capitalizedCategoryName =
         newCategoryName.charAt(0).toUpperCase() + newCategoryName.slice(1);
 
-      const response = await fetch("http://localhost:5000/api/categories", {
+      const response = await fetch("https://aramid-blog.onrender.com/api/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,7 @@ const CreateCategory = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/categories");
+      const response = await fetch("https://aramid-blog.onrender.com/api/categories");
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -67,7 +67,7 @@ const CreateCategory = () => {
 
   const deleteCategory = async (categoryId) => {
     try {
-      await fetch(`http://localhost:5000/api/categories/${categoryId}`, {
+      await fetch(`https://aramid-blog.onrender.com/api/categories/${categoryId}`, {
         method: "DELETE",
       });
       const updatedCategories = categories.filter(
@@ -89,7 +89,7 @@ const CreateCategory = () => {
   const saveEditedCategory = async (category) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/categories/${category._id}`,
+        `https://aramid-blog.onrender.com/api/categories/${category._id}`,
         {
           method: "PUT",
           headers: {

@@ -12,7 +12,7 @@ const SideBar = () => {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/admin");
+        const response = await axios.get("https://aramid-blog.onrender.com/api/admin");
         setAdminData(response.data);
       } catch (error) {
         console.error(error);

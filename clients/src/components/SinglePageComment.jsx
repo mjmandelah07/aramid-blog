@@ -15,7 +15,7 @@ const SinglePageComment = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/comments");
+        const response = await axios.get("https://aramid-blog.onrender.com/api/comments");
         const fetchedComments = response.data;
 
         setComments(fetchedComments);
@@ -82,7 +82,7 @@ const SinglePageComment = () => {
         console.log(newComment);
 
         const response = await axios.post(
-          "http://localhost:5000/api/comments",
+          "https://aramid-blog.onrender.com/api/comments",
           newComment
         );
         setComments([...comments, response.data]);
@@ -106,7 +106,7 @@ const SinglePageComment = () => {
         };
 
         const response = await axios.post(
-          `http://localhost:5000/api/comments/${commentId}/replies`,
+          `https://aramid-blog.onrender.com/api/comments/${commentId}/replies`,
           newReply
         );
         const savedReply = response.data;

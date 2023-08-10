@@ -3,7 +3,7 @@ import useFetchArticles from "../context/useFetchArticles";
 
 const RandomPost = () => {
   const { articles, loading } = useFetchArticles(
-    "http://localhost:5000/api/articles"
+    "https://aramid-blog.onrender.com/api/articles"
   );
 
   if (loading) {

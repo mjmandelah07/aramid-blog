@@ -8,7 +8,7 @@ const useFetchAvatar = (authorNames) => {
       try {
         const avatarPromises = authorNames.map(async (authorName) => {
           const response = await fetch(
-            `https://ui-avatars.com/api/?name=${authorName}&background=0D8ABC&color=fff`
+            `https://aramid-blog.onrender.com/api/?name=${authorName}&background=0D8ABC&color=fff`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch avatar");

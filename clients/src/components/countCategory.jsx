@@ -10,7 +10,7 @@ const CountCategory = () => {
   // const lastPathSegment = pathSegments[pathSegments.length - 1];
 
   const { articles } = useFetchArticles(
-    "http://localhost:5000/api/articles"
+    "https://aramid-blog.onrender.com/api/articles"
   );
   // Process the JSON data to count articles in each category
   const categoryCounts = {};
