@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
         datetime,
         avatar,
         email,
-        replies: [], // Initialize with empty replies array
+        replies: [], 
       });
       const savedComment = await newComment.save();
       res.json(savedComment);

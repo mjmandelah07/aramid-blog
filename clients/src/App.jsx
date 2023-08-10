@@ -1,17 +1,16 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-import Home from './pages/Home';
-import Login from './admin/Login';
-import Dashboard from './admin/Dashboard';
-import Category from './pages/Category';
-import MainLayout from './layouts/MainLayout';
-import SinglePage from './pages/SinglePage';
-import NoPage from './pages/NoPage';
-import CreateCategory from './admin/CreateCategory';
-import RequireAuth from './components/RequireAuth';
-import CreateArticle from './admin/CreateArticle';
-import AllPosts from './admin/AllPosts';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Home from "./pages/Home";
+import Login from "./admin/Login";
+import Dashboard from "./admin/Dashboard";
+import Category from "./pages/Category";
+import MainLayout from "./layouts/MainLayout";
+import SinglePage from "./pages/SinglePage";
+import NoPage from "./pages/NoPage";
+import CreateCategory from "./admin/CreateCategory";
+import RequireAuth from "./components/RequireAuth";
+import CreateArticle from "./admin/CreateArticle";
+import AllPosts from "./admin/AllPosts";
 
 function App() {
   return (

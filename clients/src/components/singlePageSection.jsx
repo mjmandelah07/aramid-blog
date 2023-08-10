@@ -11,8 +11,6 @@ import Footer from "../components/Footer";
 import SideBar from "../components/SideBar";
 
 const SinglePageSection = ({ data }) => {
-  // Use this data to render the data individually
-
   const [paragraphs, setParagraphs] = useState("");
   const parsedContent = parse(paragraphs);
 

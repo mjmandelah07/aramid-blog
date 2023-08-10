@@ -10,7 +10,6 @@ const CreateCategory = () => {
   const [errors, setError] = useState("");
   const [description, setDescription] = useState("");
 
-
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -20,17 +19,20 @@ const CreateCategory = () => {
       const capitalizedCategoryName =
         newCategoryName.charAt(0).toUpperCase() + newCategoryName.slice(1);
 
-      const response = await fetch("https://aramid-blog.onrender.com/api/categories", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: capitalizedCategoryName, // Capitalize the first letter
-          color: selectedColor,
-          description: description
-        }),
-      });
+      const response = await fetch(
+        "https://aramid-blog.onrender.com/api/categories",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: capitalizedCategoryName, // Capitalize the first letter
+            color: selectedColor,
+            description: description,
+          }),
+        }
+      );
 
       if (response.ok) {
         // Category successfully added
@@ -41,7 +43,7 @@ const CreateCategory = () => {
         setNewCategoryName("");
         setSelectedColor("");
         setDescription("");
-        setShowAddCategory(false);// Hide the inputs after adding
+        setShowAddCategory(false); // Hide the inputs after adding
       } else {
         const errorResponse = await response.json();
         alert(errorResponse);
@@ -57,7 +59,9 @@ const CreateCategory = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("https://aramid-blog.onrender.com/api/categories");
+      const response = await fetch(
+        "https://aramid-blog.onrender.com/api/categories"
+      );
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -67,9 +71,12 @@ const CreateCategory = () => {
 
   const deleteCategory = async (categoryId) => {
     try {
-      await fetch(`https://aramid-blog.onrender.com/api/categories/${categoryId}`, {
-        method: "DELETE",
-      });
+      await fetch(
+        `https://aramid-blog.onrender.com/api/categories/${categoryId}`,
+        {
+          method: "DELETE",
+        }
+      );
       const updatedCategories = categories.filter(
         (category) => category._id !== categoryId
       );
@@ -79,7 +86,6 @@ const CreateCategory = () => {
     }
   };
 
- 
   // editing category function
   const startEditing = (category) => {
     setEditingCategory(category._id);
@@ -154,7 +160,6 @@ const CreateCategory = () => {
                   value={selectedColor}
                   onChange={(e) => setSelectedColor(e.target.value)}
                 >
-                  
                   <option value="primary" className="bg-primary">
                     Primary
                   </option>
@@ -182,12 +187,12 @@ const CreateCategory = () => {
             <div className="row mb-3">
               <div className="col-12">
                 <textarea
-                rows={3}
-                name="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="form-control rounded"
-                placeholder="Enter a description for the category"
+                  rows={3}
+                  name="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="form-control rounded"
+                  placeholder="Enter a description for the category"
                 />
               </div>
             </div>
@@ -229,11 +234,9 @@ const CreateCategory = () => {
                     category.name
                   )}
                 </td>
+                <td>{category.color}</td>
                 <td>
-                {category.color}
-                </td>
-                <td>
-                {editingCategory === category._id ? (
+                  {editingCategory === category._id ? (
                     <div>
                       <button onClick={() => saveEditedCategory(category)}>
                         Save
@@ -243,7 +246,7 @@ const CreateCategory = () => {
                   ) : (
                     <button onClick={() => startEditing(category)}>Edit</button>
                   )}
-                  </td>
+                </td>
                 <td>
                   <button onClick={() => deleteCategory(category._id)}>
                     Delete

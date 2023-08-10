@@ -43,11 +43,7 @@ const RandomPost = () => {
     options
   );
 
-  // // Use this data to render the posts individually
-  // const imageUrl1 = `${window.location.origin}/${post1.mainImage}`;
-  // const imageUrl2 = `${window.location.origin}/${post2.image1}`;
-  // const imageUrl3 = `${window.location.origin}/${post3.image1}`;
-  // const imageUrl4 = `${window.location.origin}/${post4.image1}`;
+
   return (
     <>
       <div className="site-section bg-light">

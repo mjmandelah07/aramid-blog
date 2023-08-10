@@ -29,7 +29,7 @@ connectDB();
 // endpoint for login page
 app.use("/api/auth", authRouter);
 
-// Import the new route
+// Import the new routes
 app.use("/api/click-count", clickCountRouter);
 app.use("/api/categories", categoriesRouter);
 app.use("/api/articles", articlesRouter);

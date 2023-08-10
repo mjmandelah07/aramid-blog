@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { getMostClickedPosts } from "../context/popularClick";
@@ -8,11 +7,12 @@ const SideBar = () => {
   const [adminData, setAdminData] = useState({});
   const [mostClickedPosts, setMostClickedPosts] = useState([]);
 
-
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const response = await axios.get("https://aramid-blog.onrender.com/api/admin");
+        const response = await axios.get(
+          "https://aramid-blog.onrender.com/api/admin"
+        );
         setAdminData(response.data);
       } catch (error) {
         console.error(error);
@@ -28,13 +28,9 @@ const SideBar = () => {
       }
     };
 
-  
-
     fetchAdminData();
     fetchMostClicked();
-    
   }, []);
-
 
   return (
     <>
@@ -91,7 +87,7 @@ const SideBar = () => {
             </ul>
           </div>
         </div>
-        <CountCategory  />
+        <CountCategory />
       </div>
     </>
   );

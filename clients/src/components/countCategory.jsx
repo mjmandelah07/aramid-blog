@@ -1,18 +1,11 @@
-// Import the JSON data directly
 import { Link, Outlet } from "react-router-dom";
 import useFetchArticles from "../context/useFetchArticles";
 
-
 const CountCategory = () => {
-  // // get the path location of the category
-  // const location = useLocation();
-  // const pathSegments = location.pathname.split("/");
-  // const lastPathSegment = pathSegments[pathSegments.length - 1];
-
   const { articles } = useFetchArticles(
     "https://aramid-blog.onrender.com/api/articles"
   );
-  // Process the JSON data to count articles in each category
+
   const categoryCounts = {};
 
   // Loop through the articles and count them for each category

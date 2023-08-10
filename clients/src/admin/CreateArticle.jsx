@@ -20,7 +20,6 @@ const CreateArticle = () => {
   const cloudName = import.meta.env.VITE_CLOUD_NAME;
   const uploadPreset = import.meta.env.VITE_UPLOAD_PRESET;
 
- 
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -28,7 +27,9 @@ const CreateArticle = () => {
   // fetch categories from the database
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("https://aramid-blog.onrender.com/api/categories");
+      const response = await axios.get(
+        "https://aramid-blog.onrender.com/api/categories"
+      );
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -66,7 +67,7 @@ const CreateArticle = () => {
     // handle the banner image file
     const handleMainImageChange = async () => {
       console.log(banner);
-      // const file = e.target.files;
+
       const file = banner;
       console.log(file);
       if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
@@ -107,14 +108,6 @@ const CreateArticle = () => {
     }
 
     try {
-      // const formDataToSend = new FormData();
-      // formDataToSend.append("title", formData.title);
-      // formDataToSend.append("description", editorContent);
-      // formDataToSend.append("mainImage", formData.mainImage);
-      // formDataToSend.append("author", formData.author);
-      // // formData.categories.forEach((categoryId) => {
-      // //   formDataToSend.append("category", categoryId);
-      // // });
       const requestData = {
         title: formData.title,
         description: editorContent,
@@ -142,7 +135,6 @@ const CreateArticle = () => {
       console.error("Error posting article:", error);
     }
   };
-
 
   return (
     <>
@@ -226,7 +218,7 @@ const CreateArticle = () => {
                   type="file"
                   name="mainImage"
                   accept="image/jpeg, image/png"
-                  onChange={(e)=>setBanner(e.target.files[0])}
+                  onChange={(e) => setBanner(e.target.files[0])}
                 />
               </div>
             </div>

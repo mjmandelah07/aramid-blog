@@ -2,9 +2,9 @@ import AdminHeader from "../components/AdminHeader";
 import { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import Cookies from "js-cookie";
-import '../App.css'
-import '../index.css'
-import '../styles/admin.css'
+import "../App.css";
+import "../index.css";
+import "../styles/admin.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -40,12 +40,12 @@ const Dashboard = () => {
   };
   return (
     <>
-    <div className="bg-primary vh-100">
-      <AdminHeader logout={handleLogout} />
-      <h1 className="text-center mt-5">Welcome to dashboard</h1>
+      <div className="bg-primary vh-100">
+        <AdminHeader logout={handleLogout} />
+        <h1 className="text-center mt-5">Welcome to dashboard</h1>
       </div>
 
-      <Outlet/>
+      <Outlet />
     </>
   );
 };

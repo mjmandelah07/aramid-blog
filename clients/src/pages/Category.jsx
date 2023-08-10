@@ -1,65 +1,74 @@
 import { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import "../App.css";
-import categoriesData from "../api/categories.json";
-import jsonData from "../api/data.json";
+import useFetchCategories from "../context/useFetchCategories";
+import useFetchArticles from "../context/useFetchArticles";
+import useFetchAvatars from "../context/useFetchAvatar.js";
 import PostComponent from "../components/Post";
 import Footer from "../components/Footer";
 
 const SelectedCategoryAllPost = () => {
   const location = useLocation();
+  const { categories, loading } = useFetchCategories();
+  const { articles, loading: articlesLoading } = useFetchArticles(
+    "https://aramid-blog.onrender.com/api/articles"
+  );
+  const [authorNames, setAuthorNames] = useState([]);
 
-  // get the data from the post data object and access its properties for the category selected
+  const avatars = useFetchAvatars(authorNames);
 
+  // State to store the last path segment and selected category data
   const [lastPathSegment, setLastPathSegment] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState({});
 
-  // get the current path location and get the last segment to display
+  // Get the current path location and set the last path segment
   useEffect(() => {
     const segments = location.pathname.split("/");
-    const oneSegment = segments[segments.length - 1];
+    const oneSegment = segments[segments.length - 1].trim();
     const firstLetterToUpperCase =
       oneSegment.charAt(0).toUpperCase() + oneSegment.slice(1);
     setLastPathSegment(firstLetterToUpperCase);
   }, [location.pathname]);
 
-  // Memoize the filtered articles based on the selected category
+  // Memoized filtered articles based on the selected category
   const sameCategory = useMemo(() => {
-    if (!lastPathSegment || !jsonData.articles || !categoriesData.categories) {
+    if (!lastPathSegment || articlesLoading || loading) {
       return [];
     }
 
-    // get the datas from the category database, post database and get their datas
-    const articles = jsonData.articles;
-    const categories = categoriesData.categories;
+    // Get the articles and categories data
+    const articlesData = articles;
+    const categoriesData = categories;
 
     // Find the selected category from categoriesData
-    const category = categories.find((item) => item.name === lastPathSegment);
-
+    const category = categoriesData.find(
+      (item) => item.name === lastPathSegment
+    );
     setSelectedCategory(category);
 
     if (!category) {
       return [];
     }
 
-    // Filter the articles based on the selected category which is the lastPathSegment
-    const selectedArticles = articles.filter((article) =>
+    // Filter articles based on the selected category
+    const selectedArticles = articlesData.filter((article) =>
       article.categories.some((category) => category.name === lastPathSegment)
     );
 
-    // Extract the groups from the filtered articles
+    // Extract the relevant data for rendering
     const groups = selectedArticles.map((article) => ({
-      id: article.id,
+      id: article._id,
       title: article.title,
-      description: article.description,
-      date: article.date,
+      description: article.description.slice(3, 240),
+      date: article.createdAt,
       author: article.author,
-      images: [article.image1, article.image2, article.image3, article.image4],
+      image: article.mainImage,
       categories: article.categories,
     }));
-
+    const authorNames = groups.map((data) => data.author);
+    setAuthorNames(authorNames);
     return groups;
-  }, [lastPathSegment]);
+  }, [lastPathSegment, articlesLoading, loading, articles, categories]);
 
   return (
     <>
@@ -69,7 +78,11 @@ const SelectedCategoryAllPost = () => {
             <div className="col-md-6">
               <span>Category</span>
               <h3>{lastPathSegment}</h3>
-              <p>{selectedCategory.description}</p>
+              {!selectedCategory ? (
+                <p>{selectedCategory}</p>
+              ) : (
+                <p>{selectedCategory.description}</p>
+              )}
             </div>
           </div>
         </div>
@@ -86,19 +99,32 @@ const SelectedCategoryAllPost = () => {
             </div>
           ) : (
             <div className="row">
-              {sameCategory.map((data) => {
-                const summary = data.description[0];
+              {sameCategory.map((data, index) => {
+                const summary = data.description.slice(3, 240);
+                // get the date when the articles was created
+                const createdAtDate = new Date(data.date);
+                const options = {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                };
+                const formattedDate = createdAtDate.toLocaleDateString(
+                  undefined,
+                  options
+                );
+
                 return (
                   <PostComponent
-                    key={data.id}
-                    id={data.id}
-                    img={data.images[0]}
+                    key={data._id}
+                    id={data._id}
+                    img={data.image}
                     categories={data.categories}
-                    headshot={data.author.headshot}
-                    author={`${data.author.firstname} ${data.author.lastname}`}
+                    headshot={avatars[index]}
+                    author={data.author}
                     title={data.title}
-                    date={`${data.date.month} ${data.date.day}, ${data.date.year}`}
+                    date={formattedDate}
                     summary={summary}
+                    article={data}
                   />
                 );
               })}

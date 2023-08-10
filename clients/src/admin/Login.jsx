@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import "../styles/admin.css";
 import "../index.css";
 
@@ -50,13 +50,16 @@ const Login = () => {
 
     if (validateEmail(email) && validatePassword(password)) {
       try {
-        const response = await fetch("https://aramid-blog.onrender.com/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
+        const response = await fetch(
+          "https://aramid-blog.onrender.com/api/auth/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          }
+        );
 
         const data = await response.json();
 
@@ -73,8 +76,8 @@ const Login = () => {
             // Store the token in  cookies
             const expirationTime = Date.now() + 20 * 60 * 1000; // Current time + 20 minutes
             const token = data.token;
-            Cookies.set('token', token);
-            Cookies.set('tokenExpiration', expirationTime)
+            Cookies.set("token", token);
+            Cookies.set("tokenExpiration", expirationTime);
             navigate("/dashboard");
             alert(data.message);
           }
