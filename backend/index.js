@@ -17,10 +17,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const corsOptions = {
-  origin: "https://aramid-client-blog.onrender.com",
-};
-app.use(cors(corsOptions)); // Use the configured corsOptions
+// const corsOptions = {
+//   origin: "https://aramid-client-blog.onrender.com",
+// };
+// const corsOptions = {
+//   origin: "http://localhost:5173",
+// };
+app.use(cors()); // Use the configured corsOptions
 app.use(express.json({ limit: "10mb" }));
 app.use(bodyParser.json());
 
@@ -37,13 +40,13 @@ app.use("/api/articles", articlesRouter);
 app.use("/api/comments", commentsRouter);
 app.use("/api/admin", adminProfile);
 
-// Serve static files (React app) from the 'client' folder
-app.use(express.static(path.join(__dirname, '../clients/dist')));
+// // Serve static files (React app) from the 'client' folder
+// app.use(express.static(path.join(__dirname, '../clients/dist')));
 
-// Handle React app routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../clients/dist/index.html'));
-});
+// // Handle React app routing
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../clients/dist/index.html'));
+// });
 
 // Start the server
 app.listen(port, () => {
