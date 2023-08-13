@@ -1,15 +1,23 @@
+import { useState, useEffect } from 'react';
 import PostComponent from "./Post";
 import useFetchArticles from "../context/useFetchArticles";
 import useFetchAvatars from "../context/useFetchAvatar.js";
 
 const RecentPost = () => {
   const { articles, loading } = useFetchArticles("https://aramid-blog.onrender.com/api/articles");
-  const authorNames = articles.map((data) => data.author);
+  const [authorNames, setAuthorNames] = useState([]);
+  const [lastSixArticles, setLastSixArticles] = useState([]);
   const avatars = useFetchAvatars(authorNames);
 
-  // get the last six articles
-  const lastSixItems = articles.slice(-6);
 
+  // get the last six articles
+  useEffect(() => {
+    const getLastSixArticles = articles.slice(-6);
+    setLastSixArticles(getLastSixArticles);
+    setAuthorNames(getLastSixArticles.map((article) => article.author)); 
+  },[articles])
+  
+ 
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -23,7 +31,7 @@ const RecentPost = () => {
           </div>
         </div>
         <div className="row">
-          {lastSixItems.map((data, index) => {
+          {lastSixArticles.map((data, index) => {
             const summary = data.description.slice(3, 240);
             // get the date when the articles was created
             const createdAtDate = new Date(data.createdAt);

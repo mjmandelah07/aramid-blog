@@ -26,7 +26,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Generating a token to send to  response
-    const token = generateToken({ userId: admin.id });
+    const token = generateToken({ userId: admin._id });
     res.json({ token, message: "Welcome to aramid dashboard" });
   } catch (err) {
     console.error("Error during login:", err);

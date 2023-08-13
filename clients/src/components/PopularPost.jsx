@@ -18,6 +18,7 @@ const PopularPost = () => {
     fetchMostClickedPosts();
   }, []);
 
+
   return (
     <>
       <div className="site-section bg-light">
@@ -37,7 +38,7 @@ const PopularPost = () => {
                     <h2>{mostClickedPosts[0].title}</h2>
                     <span className="date">
                       {" "}
-                      {new Date(mostClickedPosts[0].date).toLocaleString(
+                      {new Date(mostClickedPosts[0].createdAt).toLocaleString(
                         "en-US",
                         {
                           month: "long",
@@ -62,7 +63,7 @@ const PopularPost = () => {
                     <h2>{mostClickedPosts[1].title}</h2>
                     <span className="date">
                       {" "}
-                      {new Date(mostClickedPosts[1].date).toLocaleString(
+                      {new Date(mostClickedPosts[1].createdAt).toLocaleString(
                         "en-US",
                         {
                           month: "long",
@@ -101,7 +102,7 @@ const PopularPost = () => {
                     <h2>{mostClickedPosts[2].title}</h2>
                     <span className="date">
                       {" "}
-                      {new Date(mostClickedPosts[2].date).toLocaleString(
+                      {new Date(mostClickedPosts[2].createdAt).toLocaleString(
                         "en-US",
                         {
                           month: "long",
@@ -116,7 +117,7 @@ const PopularPost = () => {
             </div>
 
             <div className="col-md-4">
-              {mostClickedPosts[0] && (
+              {mostClickedPosts[3] && (
                 <Link
                   to={`/post/${mostClickedPosts[3]._id}`}
                   key={mostClickedPosts[3]._id}
@@ -129,7 +130,7 @@ const PopularPost = () => {
                     <h2>{mostClickedPosts[3].title}</h2>
                     <span className="date">
                       {" "}
-                      {new Date(mostClickedPosts[3].date).toLocaleString(
+                      {new Date(mostClickedPosts[3].createdAt).toLocaleString(
                         "en-US",
                         {
                           month: "long",
@@ -141,7 +142,7 @@ const PopularPost = () => {
                   </div>
                 </Link>
               )}
-              {mostClickedPosts[0] && (
+              {mostClickedPosts[4] && (
                 <Link
                   to={`/post/${mostClickedPosts[4]._id}`}
                   key={mostClickedPosts[4]._id}
@@ -154,7 +155,7 @@ const PopularPost = () => {
                     <h2>{mostClickedPosts[4].title}</h2>
                     <span className="date">
                       {" "}
-                      {new Date(mostClickedPosts[4].date).toLocaleString(
+                      {new Date(mostClickedPosts[4].createdAt).toLocaleString(
                         "en-US",
                         {
                           month: "long",

@@ -51,7 +51,7 @@ const Login = () => {
     if (validateEmail(email) && validatePassword(password)) {
       try {
         const response = await fetch(
-          "https://aramid-blog.onrender.com/api/auth/login",
+          "http://localhost:5000/api/auth/login",
           {
             method: "POST",
             headers: {
@@ -62,6 +62,7 @@ const Login = () => {
         );
 
         const data = await response.json();
+        console.log(data.token);
 
         if (response.ok) {
           // Clear error messages on successful login
