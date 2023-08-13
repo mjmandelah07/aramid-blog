@@ -37,13 +37,13 @@ app.use("/api/articles", articlesRouter);
 app.use("/api/comments", commentsRouter);
 app.use("/api/admin", adminProfile);
 
-// // Serve static files (React app) from the 'client' folder
-// app.use(express.static(path.join(__dirname, '../clients/dist')));
+// Serve static files (React app) from the 'client' folder
+app.use(express.static(path.join(__dirname, '../clients/dist')));
 
-// // Handle React app routing
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../clients/dist/index.html'));
-// });
+// Handle React app routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../clients/dist/index.html'));
+});
 
 // Start the server
 app.listen(port, () => {
