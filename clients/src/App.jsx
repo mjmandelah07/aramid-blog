@@ -23,6 +23,7 @@ function App() {
               <Route path="category/:category" element={<Category />} />
               <Route path="post/:id" element={<SinglePage />} />
               <Route path="post/:id/:category" element={<Category />} />
+              <Route path="404" element={<NoPage />} />
               <Route path="*" element={<NoPage />} />
             </Route>
             <Route path="dashboard" element={<RequireAuth />}>
