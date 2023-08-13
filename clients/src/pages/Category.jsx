@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams  } from "react-router-dom";
 import "../App.css";
 import useFetchCategories from "../context/useFetchCategories";
 import useFetchArticles from "../context/useFetchArticles";
@@ -8,7 +8,7 @@ import PostComponent from "../components/Post";
 import Footer from "../components/Footer";
 
 const SelectedCategoryAllPost = () => {
-  const location = useLocation();
+  const { category } = useParams();
   const { categories, loading } = useFetchCategories();
   const { articles, loading: articlesLoading } = useFetchArticles(
     "https://aramid-blog.onrender.com/api/articles"
@@ -18,43 +18,45 @@ const SelectedCategoryAllPost = () => {
   const avatars = useFetchAvatars(authorNames);
 
   // State to store the last path segment and selected category data
-  const [lastPathSegment, setLastPathSegment] = useState("");
+  const [ categoryName, setCategoryName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState({});
 
-  // Get the current path location and set the last path segment
+  // // Get the current path location and set the last path segment
   useEffect(() => {
-    const segments = location.pathname.split("/");
-    const oneSegment = segments[segments.length - 1].trim();
+    const oneSegment = category;
     const firstLetterToUpperCase =
       oneSegment.charAt(0).toUpperCase() + oneSegment.slice(1);
-    setLastPathSegment(firstLetterToUpperCase);
-  }, [location.pathname]);
+      setCategoryName(firstLetterToUpperCase);
+  }, [category]);
 
   // Memoized filtered articles based on the selected category
   const sameCategory = useMemo(() => {
-    if (!lastPathSegment || articlesLoading || loading) {
+    if (!categoryName || articlesLoading || loading) {
       return [];
     }
-
-    // Get the articles and categories data
-    const articlesData = articles;
+    if (!categoryName) {
+      return [];
+    }
+    // // Get the articles and categories data
+    // const articlesData = articles;
     const categoriesData = categories;
 
     // Find the selected category from categoriesData
     const category = categoriesData.find(
-      (item) => item.name === lastPathSegment
+      (item) => item.name === categoryName
     );
     setSelectedCategory(category);
 
-    if (!category) {
-      return [];
-    }
+    
 
-    // Filter articles based on the selected category
-    const selectedArticles = articlesData.filter((article) =>
-      article.categories.some((category) => category.name === lastPathSegment)
-    );
-
+    // // Filter articles based on the selected category
+    // const selectedArticles = articlesData.filter((article) =>
+    //   article.categories.some((category) => category.name === lastPathSegment)
+    // );
+// Filter articles based on the category parameter
+const selectedArticles = articles.filter(article =>
+  article.categories.includes(categoryName)
+);
     // Extract the relevant data for rendering
     const groups = selectedArticles.map((article) => ({
       id: article._id,
@@ -68,7 +70,7 @@ const SelectedCategoryAllPost = () => {
     const authorNames = groups.map((data) => data.author);
     setAuthorNames(authorNames);
     return groups;
-  }, [lastPathSegment, articlesLoading, loading, articles, categories]);
+  }, [ articlesLoading, loading, articles, categories, categoryName ]);
 
   return (
     <>
@@ -77,7 +79,7 @@ const SelectedCategoryAllPost = () => {
           <div className="row">
             <div className="col-md-6">
               <span>Category</span>
-              <h3>{lastPathSegment}</h3>
+              <h3>{categoryName}</h3>
               {!selectedCategory ? (
                 <p>{selectedCategory}</p>
               ) : (

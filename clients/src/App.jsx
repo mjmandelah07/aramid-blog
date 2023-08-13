@@ -20,18 +20,18 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
-              <Route path=":category" element={<Category />} />
+              <Route path="/:category" element={<Category />} />
               <Route path="post/:id" element={<SinglePage />} />
               <Route path="post/:id/:category" element={<Category />} />
               <Route path="*" element={<NoPage />} />
-              <Route path="dashboard" element={<RequireAuth />}>
+            </Route>
+            <Route path="dashboard" element={<RequireAuth />}>
               <Route index element={<Dashboard />} />
               <Route path="categories" element={<CreateCategory />} />
               <Route path="create-post" element={<CreateArticle />} />
               <Route path="posts" element={<AllPosts />} />
             </Route>
-            </Route>
-         
+
             <Route path="login" element={<Login />} />
           </Routes>
         </div>
