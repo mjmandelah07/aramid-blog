@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import Login from "./admin/Login";
@@ -15,7 +15,7 @@ import AllPosts from "./admin/AllPosts";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         <div className="container-fluid">
           <Routes>
             <Route path="/" element={<MainLayout />}>
@@ -35,7 +35,7 @@ function App() {
             <Route path="login" element={<Login />} />
           </Routes>
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }
