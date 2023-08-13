@@ -20,7 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
-              <Route path="/:category" element={<Category />} />
+              <Route path="category/:category" element={<Category />} />
               <Route path="post/:id" element={<SinglePage />} />
               <Route path="post/:id/:category" element={<Category />} />
               <Route path="*" element={<NoPage />} />

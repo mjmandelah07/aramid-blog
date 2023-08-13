@@ -33,19 +33,19 @@ const Footer = () => {
             </ul>
             <ul className="list-group float-start">
               <li>
-                <Link to="/travel">Travel</Link>
+                <Link to="/category/travel">Travel</Link>
               </li>
               <li>
                 <Link
-            to="/lifestyle">Lifestyle</Link>
+            to="/category/lifestyle">Lifestyle</Link>
               </li>
               <li>
                 <Link
-              to="/sports">Sports</Link>
+              to="/category/sports">Sports</Link>
               </li>
               <li>
                 <Link
-              to="/nature">Nature</Link>
+              to="/category/nature">Nature</Link>
               </li>
             </ul>
           </div>

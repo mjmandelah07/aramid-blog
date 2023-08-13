@@ -25,7 +25,7 @@ export default function AllCategoriesDropDown() {
           categories.map((category) => (
             <li key={category._id}>
               <Link
-                to={category.name}
+                to={`/category/${category.name}`}
                 className={`dropdown-item bg-${category.color}`}
         
               >

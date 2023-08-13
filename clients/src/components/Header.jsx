@@ -25,16 +25,16 @@ const Header = () => {
               <Link className="nav-link" aria-current="page" to="/">
                 Home
               </Link>
-              <Link className="nav-link" to="tech">
+              <Link className="nav-link" to="/category/tech">
                 Tech
               </Link>
-              <Link className="nav-link" to="politics">
+              <Link className="nav-link" to="/category/politics">
                 Politics
               </Link>
-              <Link className="nav-link" to="travel">
+              <Link className="nav-link" to="/category/travel">
                 Travel
               </Link>
-              <Link className="nav-link " to="sports">
+              <Link className="nav-link " to="/category/sports">
                 {" "}
                 Sports
               </Link>
