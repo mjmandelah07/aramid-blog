@@ -12,9 +12,9 @@ const SinglePage = () => {
   const postId = id;
   const [authorName, setAuthorName] = useState("");
 
-  const { articles, loading } = useFetchArticles(
-    "https://aramid-blog.onrender.com/api/articles"
-  );
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+
+  const { articles, loading } = useFetchArticles(`${apiUrl}/articles`);
   const avatars = useFetchAvatars([authorName]);
   const incrementClickCount = useIncrementClickCount();
 

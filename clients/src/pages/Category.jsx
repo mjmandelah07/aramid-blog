@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import { useParams  } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 import "../App.css";
 import useFetchCategories from "../context/useFetchCategories";
 import useFetchArticles from "../context/useFetchArticles";
@@ -8,17 +9,19 @@ import PostComponent from "../components/Post";
 import Footer from "../components/Footer";
 
 const SelectedCategoryAllPost = () => {
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
   const { category } = useParams();
   const { categories, loading } = useFetchCategories();
   const { articles, loading: articlesLoading } = useFetchArticles(
-    "https://aramid-blog.onrender.com/api/articles"
+    `${apiUrl}/articles`
   );
   const [authorNames, setAuthorNames] = useState([]);
-
   const avatars = useFetchAvatars(authorNames);
+  const uniqueId = uuidv4();
+
 
   // State to store the last path segment and selected category data
-  const [ categoryName, setCategoryName] = useState("");
+  const [categoryName, setCategoryName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState({});
 
   // // Get the current path location and set the last path segment
@@ -26,7 +29,7 @@ const SelectedCategoryAllPost = () => {
     const oneSegment = category;
     const firstLetterToUpperCase =
       oneSegment.charAt(0).toUpperCase() + oneSegment.slice(1);
-      setCategoryName(firstLetterToUpperCase);
+    setCategoryName(firstLetterToUpperCase);
   }, [category]);
 
   // Memoized filtered articles based on the selected category
@@ -38,25 +41,18 @@ const SelectedCategoryAllPost = () => {
       return [];
     }
     // // Get the articles and categories data
-    // const articlesData = articles;
+    
     const categoriesData = categories;
 
     // Find the selected category from categoriesData
-    const category = categoriesData.find(
-      (item) => item.name === categoryName
-    );
+    const category = categoriesData.find((item) => item.name === categoryName);
     setSelectedCategory(category);
 
     
-
-    // // Filter articles based on the selected category
-    // const selectedArticles = articlesData.filter((article) =>
-    //   article.categories.some((category) => category.name === lastPathSegment)
-    // );
-// Filter articles based on the category parameter
-const selectedArticles = articles.filter(article =>
-  article.categories.includes(categoryName)
-);
+    // Filter articles based on the category parameter
+    const selectedArticles = articles.filter((article) =>
+      article.categories.some((category) => category.name === categoryName)
+    );
     // Extract the relevant data for rendering
     const groups = selectedArticles.map((article) => ({
       id: article._id,
@@ -70,7 +66,7 @@ const selectedArticles = articles.filter(article =>
     const authorNames = groups.map((data) => data.author);
     setAuthorNames(authorNames);
     return groups;
-  }, [ articlesLoading, loading, articles, categories, categoryName ]);
+  }, [articlesLoading, loading, articles, categories, categoryName]);
 
   return (
     <>
@@ -100,7 +96,7 @@ const selectedArticles = articles.filter(article =>
               </div>
             </div>
           ) : (
-            <div className="row">
+            <div className="row" key={uniqueId}>
               {sameCategory.map((data, index) => {
                 const summary = data.description.slice(3, 240);
                 // get the date when the articles was created
@@ -116,8 +112,9 @@ const selectedArticles = articles.filter(article =>
                 );
 
                 return (
+                 
                   <PostComponent
-                    key={data._id}
+                    key={index}
                     id={data._id}
                     img={data.image}
                     categories={data.categories}
@@ -128,6 +125,7 @@ const selectedArticles = articles.filter(article =>
                     summary={summary}
                     article={data}
                   />
+                  
                 );
               })}
             </div>

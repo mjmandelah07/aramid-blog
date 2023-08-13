@@ -9,6 +9,8 @@ const CreateCategory = () => {
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [errors, setError] = useState("");
   const [description, setDescription] = useState("");
+  
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   useEffect(() => {
     fetchCategories();
@@ -20,7 +22,7 @@ const CreateCategory = () => {
         newCategoryName.charAt(0).toUpperCase() + newCategoryName.slice(1);
 
       const response = await fetch(
-        "https://aramid-blog.onrender.com/api/categories",
+        `${apiUrl}/categories`,
         {
           method: "POST",
           headers: {
@@ -60,7 +62,7 @@ const CreateCategory = () => {
   const fetchCategories = async () => {
     try {
       const response = await fetch(
-        "https://aramid-blog.onrender.com/api/categories"
+        `${apiUrl}/categories`
       );
       const data = await response.json();
       setCategories(data);
@@ -72,7 +74,7 @@ const CreateCategory = () => {
   const deleteCategory = async (categoryId) => {
     try {
       await fetch(
-        `https://aramid-blog.onrender.com/api/categories/${categoryId}`,
+        `${apiUrl}/categories/${categoryId}`,
         {
           method: "DELETE",
         }
@@ -95,7 +97,7 @@ const CreateCategory = () => {
   const saveEditedCategory = async (category) => {
     try {
       const response = await fetch(
-        `https://aramid-blog.onrender.com/api/categories/${category._id}`,
+        `${apiUrl}/categories/${category._id}`,
         {
           method: "PUT",
           headers: {

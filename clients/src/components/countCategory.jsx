@@ -2,9 +2,8 @@ import { Link, Outlet } from "react-router-dom";
 import useFetchArticles from "../context/useFetchArticles";
 
 const CountCategory = () => {
-  const { articles } = useFetchArticles(
-    "https://aramid-blog.onrender.com/api/articles"
-  );
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+  const { articles } = useFetchArticles(`${apiUrl}/articles`);
 
   const categoryCounts = {};
 

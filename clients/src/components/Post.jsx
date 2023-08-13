@@ -23,6 +23,7 @@ const PostComponent = ({
 
   return (
     <>
+    
       <div className="col-lg-4 mb-4" key={id}>
         <div className="entry2">
           <img src={img} alt="blog" className="img-fluid rounded" />
@@ -56,6 +57,7 @@ const PostComponent = ({
           </div>
         </div>
       </div>
+      
 
       <Outlet />
     </>

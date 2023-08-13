@@ -10,12 +10,13 @@ const SinglePageComment = () => {
   const [reply, setReply] = useState("");
   const [replyIndex, setReplyIndex] = useState(null);
   const [replyName, setReplyName] = useState("");
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   // Load comments from the server on component mount
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get("https://aramid-blog.onrender.com/api/comments");
+        const response = await axios.get(`${apiUrl}/comments`);
         const fetchedComments = response.data;
 
         setComments(fetchedComments);
@@ -24,7 +25,7 @@ const SinglePageComment = () => {
       }
     };
     fetchComments();
-  }, []);
+  }, [apiUrl]);
 
   const handleReplyNameChange = (event) => {
     setReplyName(event.target.value);
@@ -81,10 +82,7 @@ const SinglePageComment = () => {
         };
         console.log(newComment);
 
-        const response = await axios.post(
-          "https://aramid-blog.onrender.com/api/comments",
-          newComment
-        );
+        const response = await axios.post(`${apiUrl}/comments`, newComment);
         setComments([...comments, response.data]);
         clearFormFields();
       } catch (error) {
@@ -106,7 +104,7 @@ const SinglePageComment = () => {
         };
 
         const response = await axios.post(
-          `https://aramid-blog.onrender.com/api/comments/${commentId}/replies`,
+          `${apiUrl}/comments/${commentId}/replies`,
           newReply
         );
         const savedReply = response.data;

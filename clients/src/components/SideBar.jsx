@@ -6,12 +6,13 @@ import CountCategory from "./countCategory";
 const SideBar = () => {
   const [adminData, setAdminData] = useState({});
   const [mostClickedPosts, setMostClickedPosts] = useState([]);
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
         const response = await axios.get(
-          "https://aramid-blog.onrender.com/api/admin"
+          `${apiUrl}/admin`
         );
         setAdminData(response.data);
       } catch (error) {
@@ -30,7 +31,7 @@ const SideBar = () => {
 
     fetchAdminData();
     fetchMostClicked();
-  }, []);
+  }, [apiUrl]);
 
   return (
     <>

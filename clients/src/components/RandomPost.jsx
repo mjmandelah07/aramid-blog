@@ -2,9 +2,8 @@ import { Link, Outlet } from "react-router-dom";
 import useFetchArticles from "../context/useFetchArticles";
 
 const RandomPost = () => {
-  const { articles, loading } = useFetchArticles(
-    "https://aramid-blog.onrender.com/api/articles"
-  );
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+  const { articles, loading } = useFetchArticles(`${apiUrl}/articles`);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -13,36 +12,22 @@ const RandomPost = () => {
   const shuffledPosts = articles.sort(() => 0.5 - Math.random());
   const randomPosts = shuffledPosts.slice(0, 4);
 
-  
   const options = { year: "numeric", month: "long", day: "numeric" };
-  
+
   // Access data for each index
   const post1 = randomPosts[0];
   const post1Date = new Date(post1.createdAt);
-  const formattedDate1 = post1Date.toLocaleDateString(
-    undefined,
-    options
-  );
+  const formattedDate1 = post1Date.toLocaleDateString(undefined, options);
 
   const post2 = randomPosts[1];
   const post2Date = new Date(post2.createdAt);
-  const formattedDate2 = post2Date.toLocaleDateString(
-    undefined,
-    options
-  );
+  const formattedDate2 = post2Date.toLocaleDateString(undefined, options);
   const post3 = randomPosts[2];
   const post3Date = new Date(post3.createdAt);
-  const formattedDate3 = post3Date.toLocaleDateString(
-    undefined,
-    options
-  );
+  const formattedDate3 = post3Date.toLocaleDateString(undefined, options);
   const post4 = randomPosts[3];
   const post4Date = new Date(post4.createdAt);
-  const formattedDate4 = post4Date.toLocaleDateString(
-    undefined,
-    options
-  );
-
+  const formattedDate4 = post4Date.toLocaleDateString(undefined, options);
 
   return (
     <>

@@ -1,10 +1,9 @@
 import axios from "axios";
 
 export const getMostClickedPosts = async (limit = 5) => {
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
   try {
-    const response = await axios.get(
-      "https://aramid-blog.onrender.com/api/click-count"
-    );
+    const response = await axios.get(`${apiUrl}/click-count`);
     const sortedPosts = response.data.sort(
       (a, b) => b.clickCount - a.clickCount
     );

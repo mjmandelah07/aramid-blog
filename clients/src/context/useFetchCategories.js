@@ -4,13 +4,12 @@ import axios from "axios";
 const useFetchCategories = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(
-          "https://aramid-blog.onrender.com/api/categories"
-        );
+        const response = await axios.get(`${apiUrl}/categories`);
         setCategories(response.data);
         setLoading(false);
       } catch (error) {
@@ -20,7 +19,7 @@ const useFetchCategories = () => {
     };
 
     fetchCategories();
-  }, []);
+  }, [apiUrl]);
 
   return { categories, loading };
 };

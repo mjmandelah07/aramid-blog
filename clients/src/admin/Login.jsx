@@ -11,6 +11,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,7 +52,7 @@ const Login = () => {
     if (validateEmail(email) && validatePassword(password)) {
       try {
         const response = await fetch(
-          "https://aramid-blog.onrender.com/api/auth/login",
+          `${apiUrl}/auth/login`,
           {
             method: "POST",
             headers: {

@@ -19,6 +19,7 @@ const CreateArticle = () => {
   const apiKey = import.meta.env.VITE_API_TINY_KEY;
   const cloudName = import.meta.env.VITE_CLOUD_NAME;
   const uploadPreset = import.meta.env.VITE_UPLOAD_PRESET;
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   useEffect(() => {
     fetchCategories();
@@ -28,7 +29,7 @@ const CreateArticle = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "https://aramid-blog.onrender.com/api/categories"
+        `${apiUrl}/categories`
       );
       setCategories(response.data);
     } catch (error) {
@@ -117,7 +118,7 @@ const CreateArticle = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/api/articles",
+        `${apiUrl}/articles`,
         requestData
       );
       console.log("Article posted:", response.data);

@@ -1,23 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import PostComponent from "./Post";
 import useFetchArticles from "../context/useFetchArticles";
 import useFetchAvatars from "../context/useFetchAvatar.js";
 
 const RecentPost = () => {
-  const { articles, loading } = useFetchArticles("https://aramid-blog.onrender.com/api/articles");
+  const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+  const { articles, loading } = useFetchArticles(`${apiUrl}/articles`);
   const [authorNames, setAuthorNames] = useState([]);
   const [lastSixArticles, setLastSixArticles] = useState([]);
   const avatars = useFetchAvatars(authorNames);
-
 
   // get the last six articles
   useEffect(() => {
     const getLastSixArticles = articles.slice(-6);
     setLastSixArticles(getLastSixArticles);
-    setAuthorNames(getLastSixArticles.map((article) => article.author)); 
-  },[articles])
-  
- 
+    setAuthorNames(getLastSixArticles.map((article) => article.author));
+  }, [articles]);
+
   if (loading) {
     return <p>Loading...</p>;
   }
